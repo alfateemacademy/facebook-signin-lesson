@@ -5,29 +5,21 @@ class Facebook extends CI_Controller {
 
 	public function index()
 	{
-		$fb = new Facebook\Facebook([
-		  'app_id' => '1537802373177371',
-		  'app_secret' => '6fa5147d3d86aede88b266ba23065911',
-		  'default_graph_version' => 'v2.2',
-		]);
+		$fb = getFacebookInstance();
 
 		$helper = $fb->getRedirectLoginHelper();
 
-		$permissions = ['email'];
+		/*$permissions = ['email'];
 		$loginUrl = $helper->getLoginUrl('https://learnfacebooksignin.dev/index.php/auth/facebook/callback', $permissions);
 
-		redirect($loginUrl, 'location');
+		redirect($loginUrl, 'location');*/
 
 		//echo '<a href="' . $loginUrl . '">Log in with Facebook!</a>';
 	}
 
 	public function callback()
 	{
-		$fb = new Facebook\Facebook([
-		  'app_id' => '1537802373177371',
-		  'app_secret' => '6fa5147d3d86aede88b266ba23065911',
-		  'default_graph_version' => 'v2.2',
-		]);
+		$fb = getFacebookInstance();
 
 		$helper = $fb->getRedirectLoginHelper();
 
@@ -46,12 +38,13 @@ class Facebook extends CI_Controller {
 
 		if (isset($accessToken)) {
 		  // Logged in!
-		  $_SESSION['facebook_access_token'] = (string) $accessToken;
+			$this->session->set_userdata('facebook_access_token', (string) $accessToken);
+		 // $_SESSION['facebook_access_token'] = (string) $accessToken;
 		  //echo $accessToken;
 
 		  // either he is new user or not
 
-		  $fb->setDefaultAccessToken($accessToken);
+		  /*$fb->setDefaultAccessToken($accessToken);
 
 		  try {
 			  $response = $fb->get('/me?fields=id,name,email,first_name,last_name,link,gender');
@@ -65,13 +58,20 @@ class Facebook extends CI_Controller {
 			  // When validation fails or other local issues
 			  echo 'Facebook SDK returned an error: ' . $e->getMessage();
 			  exit;
-			}
+			}*/
 
 
 		  // Now you can redirect to another page and use the
 		  // access token from $_SESSION['facebook_access_token']
+
+			redirect('/', 'refresh');
 		}
 
 		//print_r($this->input->get());
+	}
+
+	public function password()
+	{
+		echo "password pagep";
 	}
 }
